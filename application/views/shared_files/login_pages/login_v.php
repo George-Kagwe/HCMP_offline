@@ -91,12 +91,7 @@
 				<span style="font-size: 1.3em">Health Commodities Management Platform (HCMP)</span>
 			</div>
 
-			<div class="pull-right" style="top: 0">
-				<a href="<?php echo base_url('kenya') ?>">
-				<button class="btn btn-success ">
-					<span class="glyphicon glyphicon-dashboard"></span> Dashboard
-				</button></a>
-			</div>
+			
 
 		</div>
 		<div class="container-fluid">

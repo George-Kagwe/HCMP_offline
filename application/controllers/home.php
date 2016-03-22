@@ -15,6 +15,8 @@ class Home extends MY_Controller
 	}
 
 	public function reset_(){
+
+		
 		$facility_code=$this -> session -> userdata('facility_id');
 
 		$reset_facility_transaction_table = Doctrine_Manager::getInstance()->getCurrentConnection();
