@@ -417,90 +417,89 @@ class User extends MY_Controller {
 									Users::reset_password_multiple($facility_code, '123456');
 									echo true;
 								}
-								public function user_create($reset_user = NULL,$password_reset = NULL) {
-									if (isset($password_reset) && $password_reset == 1) {
-										$data['reset_user_id'] = isset($reset_user)?$reset_user:NULL;
-										$data['pwd_reset'] = 1;
-										$return = false;
-										$user_data = users::get_user_names($reset_user);
-										if(count($user_data)>0){
-											$data['fname'] = $user_data[0]['fname'];
-											$data['lname'] = $user_data[0]['lname'];
-											$data['username'] = $user_data[0]['username'];
-											$return = true;										
-										}else{
-											$return = false;
-										}										
-										echo $return;
-									}else{
-										$identifier = $this -> session -> userdata('user_indicator');
-										$user_type_id = $this -> session -> userdata('user_type_id');
-										$district = $this -> session -> userdata('district_id');
-										$county = $this -> session -> userdata('county_id');
-										$facility = $this -> session -> userdata('facility_id');
-			//query to get user listing by type of user
+public function user_create($reset_user = NULL,$password_reset = NULL) {
+	if (isset($password_reset) && $password_reset == 1) {
+	$data['reset_user_id'] = isset($reset_user)?$reset_user:NULL;
+	$data['pwd_reset'] = 1;
+	$return = false;
+	$user_data = users::get_user_names($reset_user);
+	if(count($user_data)>0){
+	$data['fname'] = $user_data[0]['fname'];
+	$data['lname'] = $user_data[0]['lname'];
+	$data['username'] = $user_data[0]['username'];
+	$return = true;										
+	}else{
+	$return = false;
+	}										
+	echo $return;
+	}else{
+	$identifier = $this -> session -> userdata('user_indicator');
+	$user_type_id = $this -> session -> userdata('user_type_id');
+	$district = $this -> session -> userdata('district_id');
+	$county = $this -> session -> userdata('county_id');
+	$facility = $this -> session -> userdata('facility_id');
+	//query to get user listing by type of user
 
-										switch ($identifier):
-										case 'moh':
-										$permissions='moh_permissions';
-										$template = 'shared_files/template/dashboard_template_v';
-										break;
-										case 'facility_admin':
-										$permissions='facilityadmin_permissions';
-										$data['listing']= Users::get_user_list_facility($facility);		
-										$template = 'shared_files/template/template';
-										break;
-										case 'district':
-										$permissions='district_permissions';
-										$data['listing']= Users::get_user_list_district($district);
-										$data['facilities']=Facilities::getFacilities($district);
-										$data['counts']=Users::get_users_district($district);
-										$template = 'shared_files/template/template';
-										break;
-										case 'moh_user':
-										$data['listing']= Users::get_user_list($user_type_id);	
-										$template = 'shared_files/template/dashboard_template_v';
-										break;
-										case 'district_tech':
-										$data['listing']= Users::get_user_list($user_type_id);	
-										$template = 'shared_files/template/template';
-										break;
-										case 'rtk_manager':
-										$data['listing']= Users::get_user_list($user_type_id);	
-										$template = 'shared_files/template/template';
-										break;
-										case 'super_admin':
-										$permissions='super_permissions';
-										$data['title'] = "Users";
-										$data['content_view'] = "Admin/users_v";
-										$data['listing']= Users::get_user_list_all();
-										$data['counts']=Users::get_users_count();
-										$data['counties']=Counties::getAll();	
-										$template = 'shared_files/template/dashboard_v';
-										break;
-										case 'allocation_committee':
-										$data['listing']= Users::get_user_list($user_type_id);	
-										$template = 'shared_files/template/template';
-										break;	
-										case 'county':
-										$permissions='county_permissions';
-										$data['listing']= Users::get_user_list_county($county);	
-										$data['district_data'] = districts::getDistrict($county);
-										$data['counts']=Users::get_users_county($county);
-										$template = 'shared_files/template/template';
-										
-										break;	
-										endswitch;
+	switch ($identifier):
+	case 'moh':
+	$permissions='moh_permissions';
+	$template = 'shared_files/template/dashboard_template_v';
+	break;
+	case 'facility_admin':
+	$permissions='facilityadmin_permissions';
+	$data['listing']= Users::get_user_list_facility($facility);		
+	$template = 'shared_files/template/template';
+	break;
+	case 'district':
+	$permissions='district_permissions';
+	$data['listing']= Users::get_user_list_district($district);
+	$data['facilities']=Facilities::getFacilities($district);
+	$data['counts']=Users::get_users_district($district);
+	$template = 'shared_files/template/template';
+	break;
+	case 'moh_user':
+	$data['listing']= Users::get_user_list($user_type_id);	
+	$template = 'shared_files/template/dashboard_template_v';
+	break;
+	case 'district_tech':
+	$data['listing']= Users::get_user_list($user_type_id);	
+	$template = 'shared_files/template/template';
+	break;
+	case 'rtk_manager':
+	$data['listing']= Users::get_user_list($user_type_id);	
+	$template = 'shared_files/template/template';
+	break;
+	case 'super_admin':
+	$permissions='super_permissions';
+	$data['title'] = "Users";
+	$data['content_view'] = "Admin/users_v";
+	$data['listing']= Users::get_user_list_all();
+	$data['counts']=Users::get_users_count();
+	$data['counties']=Counties::getAll();	
+	$template = 'shared_files/template/dashboard_v';
+	break;
+	case 'allocation_committee':
+	$data['listing']= Users::get_user_list($user_type_id);	
+	$template = 'shared_files/template/template';
+	break;	
+	case 'county':
+	$permissions='county_permissions';
+	$data['listing']= Users::get_user_list_county($county);	
+	$data['district_data'] = districts::getDistrict($county);
+	$data['counts']=Users::get_users_county($county);
+	$template = 'shared_files/template/template';
 
-										$data['title'] = "User Management";
-										$data['user_types']=Access_level::get_access_levels($permissions);	
-										$data['banner_text'] = "User Management";
-										$data['content_view'] = "shared_files/user_creation_v";
-										$this -> load -> view($template, $data);
-									}
-		//get user details in session
-									
-								}
+	break;	
+	endswitch;
+
+	$data['title'] = "User Management";
+	$data['user_types']=Access_level::get_access_levels($permissions);	
+	$data['banner_text'] = "User Management";
+	$data['content_view'] = "shared_files/user_creation_v";
+	$this -> load -> view($template, $data);
+	}
+	//get user details in session
+}
 
 								public function get_user_type_json()	{
 									
@@ -519,7 +518,7 @@ class User extends MY_Controller {
 								}
 								
 								public function check_user_json()	{
-									
+								
 									$test_email=$_POST['email'];
 									$mycount=count(Users::check_if_email($test_email));
 									if ($mycount > 0) {
@@ -535,10 +534,51 @@ class User extends MY_Controller {
 									
 								}
 								
-								
+								/*public function _validate(){
+
+									$data = array();
+									$data['error_string'] = array();
+									$data['inputerror'] = array();
+									$data['status'] = TRUE;
+
+									if($this->input->post('fname_edit') == '')
+									{
+										$data['inputerror'][] = 'fname_edit';
+										$data['error_string'][] = 'First name is required';
+										$data['status'] = FALSE;
+									}
+
+									if($this->input->post('lname_edit') == '')
+									{
+										$data['inputerror'][] = 'lname_edit';
+										$data['error_string'][] = 'Last name is required';
+										$data['status'] = FALSE;
+									}
+
+									if($this->input->post('telephone_edit') == '')
+									{
+										$data['inputerror'][] = 'telephone_edit';
+										$data['error_string'][] = 'please enter phone number';
+										$data['status'] = FALSE;
+									}
+
+									if($this->input->post('email_edit') == '')
+									{
+										$data['inputerror'][] = 'email_edit';
+										$data['error_string'][] = 'Please enter valid email';
+										$data['status'] = FALSE;
+									}
+
+									if($data['status'] === FALSE)
+									{
+										echo json_encode($data);
+										exit();
+									}
+							} */
 
 								public function addnew_user(){
 
+									
 									$identifier = $this -> session -> userdata('user_indicator');
 									
 		//var_dump($this->input->post());
@@ -713,597 +753,597 @@ public function addnew_user_offline(){
 
 	$identifier = $this -> session -> userdata('user_indicator');
 	
-//var_dump($this->input->post());
+			//var_dump($this->input->post());
 
-	$fname = $_POST['first_name'];
-	$lname = $_POST['last_name'];
-	$telephone = $_POST['telephone'];
-	$email_address = $_POST['email'];
-	$username = $_POST['username'];
-	$facility_id = $_POST['facility_id'];
-	$district_code = ($_POST['district_name']=='NULL')? 0: $_POST['district_name'];
-	$user_type = $_POST['user_type'];
-	$full_name= $fname .''.$lname; 
-	$county=($_POST['county']=='NULL')? 0: $_POST['county'];
-//Generate a activation code
-	$range = microtime(true);
-	
-	$activation = rand(0, $range);
-//default password is already set.
-	$default='123456';
-//removed this as the model already hashes the password at the other end
-//$salt = '#*seCrEt!@-*%';
-	
-//$password=( md5($salt . $default));	
+				$fname = $_POST['first_name'];
+				$lname = $_POST['last_name'];
+				$telephone = $_POST['telephone'];
+				$email_address = $_POST['email'];
+				$username = $_POST['username'];
+				$facility_id = $_POST['facility_id'];
+				$district_code = ($_POST['district_name']=='NULL')? 0: $_POST['district_name'];
+				$user_type = $_POST['user_type'];
+				$full_name= $fname .''.$lname; 
+				$county=($_POST['county']=='NULL')? 0: $_POST['county'];
+			//Generate a activation code
+				$range = microtime(true);
+				
+				$activation = rand(0, $range);
+			//default password is already set.
+				$default='123456';
+			//removed this as the model already hashes the password at the other end
+			//$salt = '#*seCrEt!@-*%';
+				
+			//$password=( md5($salt . $default));	
 
-	switch ($identifier):
-	case 'moh':
-	
-	break;
-	case 'facility_admin':
-	$facility_id=$this -> session -> userdata('facility_id');
-	$district_code=$this -> session -> userdata('district_id');
-	$county=$this -> session -> userdata('county_id');
+				switch ($identifier):
+				case 'moh':
+				
+				break;
+				case 'facility_admin':
+				$facility_id=$this -> session -> userdata('facility_id');
+				$district_code=$this -> session -> userdata('district_id');
+				$county=$this -> session -> userdata('county_id');
 
-	break;
-	case 'district':
-	
-	$district_code=$this -> session -> userdata('district_id');
-	$county=$this -> session -> userdata('county_id');
-	
-	break;
-	case 'super_admin':
-	$county=($_POST['county_id']=='NULL')? 0: $_POST['county_id'];	
-	case 'county':
-	$county=$this -> session -> userdata('county_id');
-	
-	break;	
-	endswitch;
-	if($email_address!=''):
-		
-		$savethis =  new Users();
-	$savethis -> fname = $fname;
-	$savethis -> lname = $lname;
-	$savethis -> email = $email_address;
-	$savethis -> username = $email_address;
-	$savethis -> password = $default;
-	$savethis -> activation = md5($activation) ;
-	$savethis -> usertype_id = $user_type;
-	$savethis -> telephone = $telephone;
-	$savethis -> district = $district_code;
-	$savethis -> facility = $facility_id;
-	$savethis -> status = 1;
-	$savethis -> county_id = $county;
-	$savethis -> save(); 
-	
-	
-	
-	$full_name = $fname.' '.$lname;
-	$link = 'health-cmp.or.ke';
-	$site_url=base_url();
-	$sms_code=$activation;
-	
-	$subject = "Account Creation";
-	$message = '
-	<table class="body">
-		<tr>
-			<td class="center" align="center" valign="top">
-				<center>
+				break;
+				case 'district':
+				
+				$district_code=$this -> session -> userdata('district_id');
+				$county=$this -> session -> userdata('county_id');
+				
+				break;
+				case 'super_admin':
+				$county=($_POST['county_id']=='NULL')? 0: $_POST['county_id'];	
+				case 'county':
+				$county=$this -> session -> userdata('county_id');
+				
+				break;	
+				endswitch;
+				if($email_address!=''):
+					
+					$savethis =  new Users();
+				$savethis -> fname = $fname;
+				$savethis -> lname = $lname;
+				$savethis -> email = $email_address;
+				$savethis -> username = $email_address;
+				$savethis -> password = $default;
+				$savethis -> activation = md5($activation) ;
+				$savethis -> usertype_id = $user_type;
+				$savethis -> telephone = $telephone;
+				$savethis -> district = $district_code;
+				$savethis -> facility = $facility_id;
+				$savethis -> status = 1;
+				$savethis -> county_id = $county;
+				$savethis -> save(); 
+				
+				
+				
+				$full_name = $fname.' '.$lname;
+				$link = 'health-cmp.or.ke';
+				$site_url=base_url();
+				$sms_code=$activation;
+				
+				$subject = "Account Creation";
+				$message = '
+				<table class="body">
+					<tr>
+						<td class="center" align="center" valign="top">
+							<center>
 
-					<table class="row header">
-						<tr>
-							<td class="center" align="center">
-								<center>
-
-									<table class="container">
-										<tr>
-											<td class="wrapper last">
-
-												<table class="twelve columns">
-													<tr>
-														<td class="six sub-columns last" style="text-align:right; vertical-align:middle;">
-															<span class="template-label"></span>
-														</td>
-														<td class="expander"></td>
-													</tr>
-												</table>
-
-											</td>
-										</tr>
-									</table>
-
-								</center>
-							</td>
-						</tr>
-					</table>
-
-					<table class="container">
-						<tr>
-							<td>
-
-								<table class="row">
+								<table class="row header">
 									<tr>
-										<td class="wrapper last">
-											
-											<table class="twelve columns">
-												<tr>
-													<td class="panel">
-														<a href="' . $link . '"
-														style="background-color:#ffffff;color:#4566A9;display:inline-block;font-family:sans-serif;font-size:18px;line-height:40px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;">Welcome to HCMP.</a>
-													</td>
-													<td class="expander"></td>
-												</tr>
-											</table></br></br>
+										<td class="center" align="center">
+											<center>
 
-											<table class="twelve columns">
-												<tr>
-													<td>
-														<p>
-															Your HCMP Account - ' . $email_address . ' -  was recently created.</br>
-															
-															
-															
+												<table class="container">
+													<tr>
+														<td class="wrapper last">
+
+															<table class="twelve columns">
+																<tr>
+																	<td class="six sub-columns last" style="text-align:right; vertical-align:middle;">
+																		<span class="template-label"></span>
+																	</td>
+																	<td class="expander"></td>
+																</tr>
+															</table>
+
 														</td>
-														<td class="expander"></td>
 													</tr>
 												</table>
 
-											</td>
-										</tr>
-									</table>
+											</center>
+										</td>
+									</tr>
+								</table>
 
-									<table class="row callout">
-										<tr>
-											<td class="wrapper last">
+								<table class="container">
+									<tr>
+										<td>
 
-											</tr>
-										</table>'; 
+											<table class="row">
+												<tr>
+													<td class="wrapper last">
+														
+														<table class="twelve columns">
+															<tr>
+																<td class="panel">
+																	<a href="' . $link . '"
+																	style="background-color:#ffffff;color:#4566A9;display:inline-block;font-family:sans-serif;font-size:18px;line-height:40px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;">Welcome to HCMP.</a>
+																</td>
+																<td class="expander"></td>
+															</tr>
+														</table></br></br>
 
-	// $email_address=$email_address.',karsanrichard@gmail.com,ttunduny@gmail.com';
-	$email_address=$email_address.',ttunduny@gmail.com';
-	$this -> hcmp_functions -> send_email($email_address, $message, $subject, $attach_file = NULL, $bcc_email = NULL, $cc_email = NULL,$full_name);
+														<table class="twelve columns">
+															<tr>
+																<td>
+																	<p>
+																		Your HCMP Account - ' . $email_address . ' -  was recently created.</br>
+																		
+																		
+																		
+																	</td>
+																	<td class="expander"></td>
+																</tr>
+															</table>
 
-//exit;
-//save report access
+														</td>
+													</tr>
+												</table>
 
-//save user
-	
-	endif;
-	echo "true";
+												<table class="row callout">
+													<tr>
+														<td class="wrapper last">
+
+														</tr>
+													</table>'; 
+
+				// $email_address=$email_address.',karsanrichard@gmail.com,ttunduny@gmail.com';
+				$email_address=$email_address.',ttunduny@gmail.com';
+				$this -> hcmp_functions -> send_email($email_address, $message, $subject, $attach_file = NULL, $bcc_email = NULL, $cc_email = NULL,$full_name);
+
+			//exit;
+			//save report access
+
+			//save user
+				
+				endif;
+				echo "true";
+
+}
+
+public function edit_user(){
+
+		$county = $this -> session -> userdata('county_id');
+		$identifier = $this -> session -> userdata('user_indicator');
+
+		$fname = $_POST['fname_edit'];
+		$lname = $_POST['lname_edit'];
+		$status = $_POST['status'];
+		$telephone_edit= $_POST['telephone_edit'];
+		$email_edit = $_POST['email_edit'];
+		$username_edit = $_POST['username_edit'];
+		$user_type_edit_district = $_POST['user_type_edit_district'];
+		$district_name_edit = $_POST['district_name_edit'];
+		$email_recieve_edit = $_POST['email_recieve_edit'];
+		$sms_recieve_edit = $_POST['sms_recieve_edit'];
+
+		$user_id= $_POST['user_id'];
+		//echo $email_recieve_edit;exit;
+
+		if ($status=="true") {
+
+		$status=1;
+
+		} elseif($status=="false") {
+
+		$status=0;
+		}
+
+		if ($email_recieve_edit=="true") {
+
+		$email_recieve_edit=1;
+
+		} elseif($email_recieve_edit=="false") {
+
+		$email_recieve_edit=0;
+		}
+
+		if ($sms_recieve_edit=="true") {
+
+		$sms_recieve_edit=1;
+
+		} elseif($sms_recieve_edit=="false") {
+
+		$sms_recieve_edit=0;
+		}
+
+		if ($identifier=="district") {
+
+		$facility_id_edit = $_POST['facility_id_edit_district'];
+
+		} elseif($identifier=="county") {
+
+		$facility_id_edit= $_POST['facility_id_edit'];
+		}
+
+
+		//update user
+
+		$update_user = Doctrine_Manager::getInstance()->getCurrentConnection();
+		$update_user->execute("UPDATE `user` SET fname ='$fname' ,lname ='$lname',email ='$email_edit',usertype_id =$user_type_edit_district,telephone ='$telephone_edit',
+		district ='$district_name_edit',facility ='$facility_id_edit',status ='$status',county_id ='$county',
+		email_recieve ='$email_recieve_edit',
+		sms_recieve ='$sms_recieve_edit'
+		WHERE `id`= '$user_id'");
+
+}
+public function activation($myurl){
+
+		$myurl=$this->uri->segment(3);
+		$cipher= md5($myurl);
+
+		//query to find match 
+		Users::check_activation($cipher);
+		$restrict= count(Users::check_activation($cipher));
+
+
+		if ($restrict==0) {
+
+		$this -> load -> view('shared_files/404');
+		}else {
+		$this -> load -> view('shared_files/activation');
+		}
+
+}
+																	
+public function activation_final_phase(){
+
+			$email = $_POST['username'];
+			$password = $_POST['new_password'];
+
+			$myurl=$this->uri->segment(3);
+
+			//confirm user exists and is inactive
+
+			$data=Users::check_user_exist_activate($email);
+			foreach ($data as $key => $value) {					
+
+			$user_id=$value->id;
+			}
+
+			$new_password_confirm=$password ;
+
+			Users::reset_password($user_id, $new_password_confirm);
+			$this -> session -> sess_destroy(); session_destroy();
 
 
 }
-																	public function edit_user(){
+public function change_default(){
 
-																		$county = $this -> session -> userdata('county_id');
-																		$identifier = $this -> session -> userdata('user_indicator');
+$email = $_POST['username'];
+$password = $_POST['new_password'];
 
-																		$fname = $_POST['fname_edit'];
-																		$lname = $_POST['lname_edit'];
-																		$status = $_POST['status'];
-																		$telephone_edit= $_POST['telephone_edit'];
-																		$email_edit = $_POST['email_edit'];
-																		$username_edit = $_POST['username_edit'];
-																		$user_type_edit_district = $_POST['user_type_edit_district'];
-																		$district_name_edit = $_POST['district_name_edit'];
-																		$email_recieve_edit = $_POST['email_recieve_edit'];
-																		$sms_recieve_edit = $_POST['sms_recieve_edit'];
+$myurl=$this->uri->segment(3);
 
-																		$user_id= $_POST['user_id'];
-		//echo $email_recieve_edit;exit;
+//confirm user exists and is inactive
 
-																		if ($status=="true") {
-																			
-																			$status=1;
-																			
-																		} elseif($status=="false") {
-																			
-																			$status=0;
-																		}
+$data=Users::check_user_exist_activate($email);
+foreach ($data as $key => $value) {					
 
-																		if ($email_recieve_edit=="true") {
-																			
-																			$email_recieve_edit=1;
-																			
-																		} elseif($email_recieve_edit=="false") {
-																			
-																			$email_recieve_edit=0;
-																		}
+$user_id=$value->id;
+}
 
-																		if ($sms_recieve_edit=="true") {
-																			
-																			$sms_recieve_edit=1;
-																			
-																		} elseif($sms_recieve_edit=="false") {
-																			
-																			$sms_recieve_edit=0;
-																		}
+$new_password_confirm=$password ;
 
-																		if ($identifier=="district") {
-																			
-																			$facility_id_edit = $_POST['facility_id_edit_district'];
-																			
-																		} elseif($identifier=="county") {
-																			
-																			$facility_id_edit= $_POST['facility_id_edit'];
-																		}
-																		
-																		
-		//update user
-																		
-																		$update_user = Doctrine_Manager::getInstance()->getCurrentConnection();
-																		$update_user->execute("UPDATE `user` SET fname ='$fname' ,lname ='$lname',email ='$email_edit',usertype_id =$user_type_edit_district,telephone ='$telephone_edit',
-																			district ='$district_name_edit',facility ='$facility_id_edit',status ='$status',county_id ='$county',
-																			email_recieve ='$email_recieve_edit',
-																			sms_recieve ='$sms_recieve_edit'
-																			WHERE `id`= '$user_id'");
-																		
-																	}
-																	public function activation($myurl){
-																		
-																		$myurl=$this->uri->segment(3);
-																		$cipher= md5($myurl);
-																		
-			//query to find match 
-																		Users::check_activation($cipher);
-																		$restrict= count(Users::check_activation($cipher));
-																		
-																		
-																		if ($restrict==0) {
-																			
-																			$this -> load -> view('shared_files/404');
-																		}else {
-																			$this -> load -> view('shared_files/activation');
-																		}
-																		
-																	}
-																	
-																	public function activation_final_phase(){
-																		
-																		$email = $_POST['username'];
-																		$password = $_POST['new_password'];
+Users::reset_password($user_id, $new_password_confirm);
+$this -> session -> sess_destroy(); session_destroy();
+$data['title'] = "Login";
+$this -> load -> view("shared_files/login_pages/login_v", $data);
 
-																		$myurl=$this->uri->segment(3);
-
-			//confirm user exists and is inactive
-																		
-																		$data=Users::check_user_exist_activate($email);
-																		foreach ($data as $key => $value) {					
-																			
-																			$user_id=$value->id;
-																		}
-																		
-																		$new_password_confirm=$password ;
-																		
-																		Users::reset_password($user_id, $new_password_confirm);
-																		$this -> session -> sess_destroy(); session_destroy();
-																		
-																		
-																	}
-																	public function change_default(){
-																		
-																		$email = $_POST['username'];
-																		$password = $_POST['new_password'];
-
-																		$myurl=$this->uri->segment(3);
-
-			//confirm user exists and is inactive
-																		
-																		$data=Users::check_user_exist_activate($email);
-																		foreach ($data as $key => $value) {					
-																			
-																			$user_id=$value->id;
-																		}
-																		
-																		$new_password_confirm=$password ;
-																		
-																		Users::reset_password($user_id, $new_password_confirm);
-																		$this -> session -> sess_destroy(); session_destroy();
-																		$data['title'] = "Login";
-																		$this -> load -> view("shared_files/login_pages/login_v", $data);
-																		
-																	}
+}
 
 
-																	public function save_new_password() {
-		// echo "<pre>";
-		// echo json_encode($_POST);die;
-																		$id=$this -> session -> userdata('user_id');		
-																		$old_password=$_POST['current_password'];
-																		$new_passw=$_POST['new_password_confirm'];
-																		$salt = '#*seCrEt!@-*%';
-		//retrieve password and compare
-																		
-																		$getdata=Users::getuserby_id($id);
-																		$db_password=$getdata[0]['password'];
-		//echo "</br>";
-																		$captured_password=( md5($salt . $old_password));
-		// echo json_encode($db_password);die;
-		//exit;
-		// $valid_old_password = $this -> correct_current_password($db_password,$captured_password);
-																		
-																		if ($db_password != $captured_password) {
-																			$response = array('msg' => '<div class="bg-danger">Your current password does not match.Please try again</div>','response'=> 'false');
-																			
-																			echo json_encode($response);
-			//echo "Dont match";
-																		} else {
-																			
-																			$salt = '#*seCrEt!@-*%';
-																			
-																			$new_password=( md5($salt . $new_passw));						
-																			$updatep = Doctrine_Manager::getInstance()->getCurrentConnection();			
+public function save_new_password() {
+// echo "<pre>";
+// echo json_encode($_POST);die;
+$id=$this -> session -> userdata('user_id');		
+$old_password=$_POST['current_password'];
+$new_passw=$_POST['new_password_confirm'];
+$salt = '#*seCrEt!@-*%';
+//retrieve password and compare
+
+$getdata=Users::getuserby_id($id);
+$db_password=$getdata[0]['password'];
+//echo "</br>";
+$captured_password=( md5($salt . $old_password));
+// echo json_encode($db_password);die;
+//exit;
+// $valid_old_password = $this -> correct_current_password($db_password,$captured_password);
+
+if ($db_password != $captured_password) {
+$response = array('msg' => '<div class="bg-danger">Your current password does not match.Please try again</div>','response'=> 'false');
+
+echo json_encode($response);
+//echo "Dont match";
+} else {
+
+$salt = '#*seCrEt!@-*%';
+
+$new_password=( md5($salt . $new_passw));						
+$updatep = Doctrine_Manager::getInstance()->getCurrentConnection();			
 //update password
-																			$updatep->execute("UPDATE user SET password='$new_password'  WHERE id='$id'; ");
-																			$response = array('msg' => 'Success!!! Your password has been changed. Exit to continue','response'=> 'true');
-																			echo json_encode($response);
-																		}
-																		
-																		
+$updatep->execute("UPDATE user SET password='$new_password'  WHERE id='$id'; ");
+$response = array('msg' => 'Success!!! Your password has been changed. Exit to continue','response'=> 'true');
+echo json_encode($response);
+}
 
-																	}
 
-																	public function sms_activate(){
-																		
-																		$this -> load -> view("shared_files/sms_activation_v");
-																	}
-																	
-																	
-																	public function sms_activation(){
-																		
-																		
-																		$phone = $_POST['phone_n'];
-																		$actication_code= $_POST['a_code'];
-																		$new_pass = $_POST['new_password'];
-																		$write_new = $_POST['new_password_confirm'];
-																		$code = md5($actication_code);
-																		$exist_active=Users::check_db_activation($phone,$code);
-																		$count=count($exist_active);
-																		$new_password_confirm=$write_new;
-																		
-																		
-																		if ($new_pass != $write_new || $new_pass = "" || $write_new = ""||$phone="") {
-																			$data['popup'] = "error_nomatch";
-																			$data['title'] = "Password Recovery";
-																			$this -> load -> view("shared_files/sms_activation_v", $data);
-																			
-																		} else {
-																			foreach ($exist_active as $key => $value) {
 
-																				$user_id = $value["id"];
-																				$activation_db = $value["activation"];
+}
 
-																			}
-																			
-																			
-																			if ($count>0 && $activation_db=$code) {
-				//update as activated
-																				
-																				Users::reset_password($user_id, $new_password_confirm);
-																				$data['popup'] = "activation";
-																				$data['title'] = "Password Recovery";
-																				$this -> load -> view("shared_files/login_pages/login_v", $data);
-																				
-																			} else {
-																				
-																				$data['popup'] = "error_nomatch";
-																				$data['title'] = "Password Recovery";
-																				$this -> load -> view("shared_files/sms_activation_v", $data);
-																			}
-																			
-																			
+public function sms_activate(){
 
-																		}
-																		
+$this -> load -> view("shared_files/sms_activation_v");
+}
 
-																		
-																	}
 
-																	public function reset_pass_to_default($user_id){
-			// echo "<pre>";var_dump($this->input->post());exit;	
-			// $user_id = $this->input->post('user_id');
-			// echo "This: ".$user_id;exit;
-																		$query =  Doctrine_Manager::getInstance() -> getCurrentConnection() -> execute("
-																			UPDATE `hcmp_rtk`.`user` SET `password`='b56578e2f9d28c7497f42b32cbaf7d68' WHERE `id`=$user_id;");
-																		$pwd_reset = 1;
-																		$user_id = $user_id;
-																		
-			// echo "<pre>";print_r($user_data);echo "</pre>"; exit;	
-																		$this -> user_create($user_id,$pwd_reset);																		
+public function sms_activation(){
 
-																	}
 
-																	public function user_create_multiple($facility_code=null){
+$phone = $_POST['phone_n'];
+$actication_code= $_POST['a_code'];
+$new_pass = $_POST['new_password'];
+$write_new = $_POST['new_password_confirm'];
+$code = md5($actication_code);
+$exist_active=Users::check_db_activation($phone,$code);
+$count=count($exist_active);
+$new_password_confirm=$write_new;
 
-		//get user details in session
-																		$identifier = $this -> session -> userdata('user_indicator');
-																		$user_type_id = $this -> session -> userdata('user_type_id');
-																		$district = $this -> session -> userdata('district_id');
-																		$county = $this -> session -> userdata('county_id');
-																		$facility = $this -> session -> userdata('facility_id');
-		//query to get user listing by type of user
 
-																		switch ($identifier):
-																		case 'moh':
-																		$permissions='moh_permissions';
-																		$template = 'shared_files/template/dashboard_template_v';
-																		break;
-																		case 'facility_admin':
-																		$permissions='facilityadmin_permissions';
-																		$data['listing']= Users::get_user_list_facility($facility);		
-																		$template = 'shared_files/template/template';
-																		break;
-																		case 'district':
-																		$permissions='district_permissions';
-																		$data['listing']= Users::get_user_list_district($district);
-																		if($facility_code==0){
-																			$data['facilities']=Facilities::getFacilities($district);
-																			$facility_name = null;
-																			$facility_banner_text = null;
-																			$no_of_facilities = 0;
-																		}else{
-																			$data['facilities']=Facilities::getFacilities_from_facility_code($facility_code);
-																			$facility_banner_text =  ' to: '.$data['facilities'][0]['facility_name'];			
-																			$facility_name = $data['facilities'][0]['facility_name'];						
-																			$no_of_facilities = 1;					
-																		}
-																		
-																		$data['counts']=Users::get_users_district($district);
-																		$template = 'shared_files/template/template';
-																		break;
-																		case 'moh_user':
-																		$data['listing']= Users::get_user_list($user_type_id);	
-																		$template = 'shared_files/template/dashboard_template_v';
-																		break;
-																		case 'district_tech':
-																		$data['listing']= Users::get_user_list($user_type_id);	
-																		$template = 'shared_files/template/template';
-																		break;
-																		case 'rtk_manager':
-																		$data['listing']= Users::get_user_list($user_type_id);	
-																		$template = 'shared_files/template/template';
-																		break;
-																		case 'super_admin':
-																		$permissions='super_permissions';
-																		$data['title'] = "Users";
-																		$data['content_view'] = "Admin/users_v";
-																		$data['listing']= Users::get_user_list_all();
-																		$data['counts']=Users::get_users_count();
-																		$data['counties']=Counties::getAll();	
-																		$template = 'shared_files/template/dashboard_v';
-																		break;
-																		case 'allocation_committee':
-																		$data['listing']= Users::get_user_list($user_type_id);	
-																		$template = 'shared_files/template/template';
-																		break;	
-																		case 'county':
-																		$permissions='county_permissions';
-																		if($facility_code==0){
-																			$data['facilities']=Facilities::getFacilities($district);
-																			$facility_name = null;
-																			$facility_banner_text = null;
-																			$district_name = null;										
-																			$district_id = null;										
-																			$no_of_facilities = 0;
-																		}else{
-																			$data['facilities']=Facilities::getFacilities_from_facility_code($facility_code);
-																			$facility_banner_text =  ' to: '.$data['facilities'][0]['facility_name'];			
-																			$facility_name = $data['facilities'][0]['facility_name'];					
-																			$district_id = $data['facilities'][0]['district'];								
-																			$district_data = Districts::get_district_name($district_id);		
-																			$district_name = $district_data[0]['district'];					
-																			$no_of_facilities = 1;					
-																		}
-																		$data['listing']= Users::get_user_list_county($county);	
-																		$data['district_data'] = districts::getDistrict($county);
-																		$data['counts']=Users::get_users_county($county);
-																		$template = 'shared_files/template/template';
-																		
-																		break;	
-																		endswitch;
+if ($new_pass != $write_new || $new_pass = "" || $write_new = ""||$phone="") {
+$data['popup'] = "error_nomatch";
+$data['title'] = "Password Recovery";
+$this -> load -> view("shared_files/sms_activation_v", $data);
 
-																		$data['title'] = "Add Multiple Users";
-																		$data['user_types']=Access_level::get_access_levels($permissions);	
-																		$data['banner_text'] = "Multiple User Addition";
-																		$data['facility_name'] = $facility_name;
-																		$data['facility_code'] = $facility_code;
-																		$data['facility_banner_text'] = $facility_banner_text;
-																		$data['district_name'] = $district_name;
-																		$data['district_id'] = $district_id;
-																		$data['no_of_facilities'] = $no_of_facilities;
-																		$data['content_view'] = "shared_files/add_users_multiple";		
-																		$this -> load -> view($template, $data);
-																	}
+} else {
+foreach ($exist_active as $key => $value) {
 
-																	public function add_users_backend($fname,$lname,$email_address,$username,$telephone,$user_type,$facility_id){
-																		$identifier = $this -> session -> userdata('user_indicator');
-																		$county = $this -> session -> userdata('county_id');
-																		$district = $this -> session -> userdata('district_id');
-																		$district = (isset($district))? $this -> session -> userdata('district_id') : NULL ;
-																		$district_code = $district;
-																		$full_name= $fname .''.$lname; 
-		//Generate a activation code
-																		$range = microtime(true);
-																		$activation = rand(0, $range);
-		//default password is already set.
-																		$default='123456';
-		//removed this as the model already hashes the password at the other end
-		//$salt = '#*seCrEt!@-*%';
-		//$password=( md5($salt . $default));	
+$user_id = $value["id"];
+$activation_db = $value["activation"];
 
-																		switch ($identifier):
-																		case 'moh':
-																		
-																		break;
-																		case 'facility_admin':
-																		$facility_id=$this -> session -> userdata('facility_id');
-																		$district_code=$this -> session -> userdata('district_id');
-																		$county=$this -> session -> userdata('county_id');
+}
 
-																		break;
-																		case 'district':
-																		
-																		$district_code=$this -> session -> userdata('district_id');
-																		$county=$this -> session -> userdata('county_id');
-																		
-																		break;
-																		case 'super_admin':
-																		$county=($_POST['county_id']=='NULL')? 0: $_POST['county_id'];	
-																		case 'county':
-																		$county=$this -> session -> userdata('county_id');
-																		
-																		break;	
-																		endswitch;
-																		if($email_address!=''):
-																			
-																			$savethis =  new Users();
-																		$savethis -> fname = $fname;
-																		$savethis -> lname = $lname;
-																		$savethis -> email = $email_address;
-																		$savethis -> username = $username;
-																		$savethis -> password = $default;
-																		$savethis -> activation = md5($activation) ;
-																		$savethis -> usertype_id = $user_type;
-																		$savethis -> telephone = $telephone;
-																		$savethis -> district = $district_code;
-																		$savethis -> facility = $facility_id;
-																		$savethis -> status = 1;
-																		$savethis -> county_id = $county;
-																		$savethis -> save(); 
-																		
-			//$phones=$telephone;
-																		$message="Dear $fname $lname, your default password is : $default. \nVisit health-cmp.or.ke to change it and access the system.";
-																		
-																		$message=urlencode($message);
-    		//echo '<pre>'; print_r($phone_numbers);echo '<pre>';exit;
-																		file("http://41.57.109.242:13000/cgi-bin/sendsms?username=clinton&password=ch41sms&to=$telephone&text=$message");
-																		
-		//Send registered user email with password and validation link
-																		
-																		$full_name = $fname.' '.$lname;
-																		$link = 'health-cmp.or.ke';
-																		$site_url=base_url();
-																		$sms_code=$activation;
-																		
-																		$subject = "Account Creation";
-																		$message = '
-																		<table class="body">
-																			<tr>
-																				<td class="center" align="center" valign="top">
-																					<center>
 
-																						<table class="row header">
-																							<tr>
-																								<td class="center" align="center">
-																									<center>
+if ($count>0 && $activation_db=$code) {
+//update as activated
 
-																										<table class="container">
-																											<tr>
-																												<td class="wrapper last">
+Users::reset_password($user_id, $new_password_confirm);
+$data['popup'] = "activation";
+$data['title'] = "Password Recovery";
+$this -> load -> view("shared_files/login_pages/login_v", $data);
 
-																													<table class="twelve columns">
-																														<tr>
-																															<td class="six sub-columns last" style="text-align:right; vertical-align:middle;">
+} else {
+
+$data['popup'] = "error_nomatch";
+$data['title'] = "Password Recovery";
+$this -> load -> view("shared_files/sms_activation_v", $data);
+}
+
+
+
+}
+
+
+
+}
+
+public function reset_pass_to_default($user_id){
+// echo "<pre>";var_dump($this->input->post());exit;	
+// $user_id = $this->input->post('user_id');
+// echo "This: ".$user_id;exit;
+$query =  Doctrine_Manager::getInstance() -> getCurrentConnection() -> execute("
+UPDATE `hcmp_rtk`.`user` SET `password`='b56578e2f9d28c7497f42b32cbaf7d68' WHERE `id`=$user_id;");
+$pwd_reset = 1;
+$user_id = $user_id;
+
+// echo "<pre>";print_r($user_data);echo "</pre>"; exit;	
+$this -> user_create($user_id,$pwd_reset);																		
+
+}
+
+public function user_create_multiple($facility_code=null){
+
+//get user details in session
+$identifier = $this -> session -> userdata('user_indicator');
+$user_type_id = $this -> session -> userdata('user_type_id');
+$district = $this -> session -> userdata('district_id');
+$county = $this -> session -> userdata('county_id');
+$facility = $this -> session -> userdata('facility_id');
+//query to get user listing by type of user
+
+switch ($identifier):
+case 'moh':
+$permissions='moh_permissions';
+$template = 'shared_files/template/dashboard_template_v';
+break;
+case 'facility_admin':
+$permissions='facilityadmin_permissions';
+$data['listing']= Users::get_user_list_facility($facility);		
+$template = 'shared_files/template/template';
+break;
+case 'district':
+$permissions='district_permissions';
+$data['listing']= Users::get_user_list_district($district);
+if($facility_code==0){
+$data['facilities']=Facilities::getFacilities($district);
+$facility_name = null;
+$facility_banner_text = null;
+$no_of_facilities = 0;
+}else{
+$data['facilities']=Facilities::getFacilities_from_facility_code($facility_code);
+$facility_banner_text =  ' to: '.$data['facilities'][0]['facility_name'];			
+$facility_name = $data['facilities'][0]['facility_name'];						
+$no_of_facilities = 1;					
+}
+
+$data['counts']=Users::get_users_district($district);
+$template = 'shared_files/template/template';
+break;
+case 'moh_user':
+$data['listing']= Users::get_user_list($user_type_id);	
+$template = 'shared_files/template/dashboard_template_v';
+break;
+case 'district_tech':
+$data['listing']= Users::get_user_list($user_type_id);	
+$template = 'shared_files/template/template';
+break;
+case 'rtk_manager':
+$data['listing']= Users::get_user_list($user_type_id);	
+$template = 'shared_files/template/template';
+break;
+case 'super_admin':
+$permissions='super_permissions';
+$data['title'] = "Users";
+$data['content_view'] = "Admin/users_v";
+$data['listing']= Users::get_user_list_all();
+$data['counts']=Users::get_users_count();
+$data['counties']=Counties::getAll();	
+$template = 'shared_files/template/dashboard_v';
+break;
+case 'allocation_committee':
+$data['listing']= Users::get_user_list($user_type_id);	
+$template = 'shared_files/template/template';
+break;	
+case 'county':
+$permissions='county_permissions';
+if($facility_code==0){
+$data['facilities']=Facilities::getFacilities($district);
+$facility_name = null;
+$facility_banner_text = null;
+$district_name = null;										
+$district_id = null;										
+$no_of_facilities = 0;
+}else{
+$data['facilities']=Facilities::getFacilities_from_facility_code($facility_code);
+$facility_banner_text =  ' to: '.$data['facilities'][0]['facility_name'];			
+$facility_name = $data['facilities'][0]['facility_name'];					
+$district_id = $data['facilities'][0]['district'];								
+$district_data = Districts::get_district_name($district_id);		
+$district_name = $district_data[0]['district'];					
+$no_of_facilities = 1;					
+}
+$data['listing']= Users::get_user_list_county($county);	
+$data['district_data'] = districts::getDistrict($county);
+$data['counts']=Users::get_users_county($county);
+$template = 'shared_files/template/template';
+
+break;	
+endswitch;
+
+$data['title'] = "Add Multiple Users";
+$data['user_types']=Access_level::get_access_levels($permissions);	
+$data['banner_text'] = "Multiple User Addition";
+$data['facility_name'] = $facility_name;
+$data['facility_code'] = $facility_code;
+$data['facility_banner_text'] = $facility_banner_text;
+$data['district_name'] = $district_name;
+$data['district_id'] = $district_id;
+$data['no_of_facilities'] = $no_of_facilities;
+$data['content_view'] = "shared_files/add_users_multiple";		
+$this -> load -> view($template, $data);
+}
+
+public function add_users_backend($fname,$lname,$email_address,$username,$telephone,$user_type,$facility_id){
+$identifier = $this -> session -> userdata('user_indicator');
+$county = $this -> session -> userdata('county_id');
+$district = $this -> session -> userdata('district_id');
+$district = (isset($district))? $this -> session -> userdata('district_id') : NULL ;
+$district_code = $district;
+$full_name= $fname .''.$lname; 
+//Generate a activation code
+$range = microtime(true);
+$activation = rand(0, $range);
+//default password is already set.
+$default='123456';
+//removed this as the model already hashes the password at the other end
+//$salt = '#*seCrEt!@-*%';
+//$password=( md5($salt . $default));	
+
+switch ($identifier):
+case 'moh':
+
+break;
+case 'facility_admin':
+$facility_id=$this -> session -> userdata('facility_id');
+$district_code=$this -> session -> userdata('district_id');
+$county=$this -> session -> userdata('county_id');
+
+break;
+case 'district':
+
+$district_code=$this -> session -> userdata('district_id');
+$county=$this -> session -> userdata('county_id');
+
+break;
+case 'super_admin':
+$county=($_POST['county_id']=='NULL')? 0: $_POST['county_id'];	
+case 'county':
+$county=$this -> session -> userdata('county_id');
+
+break;	
+endswitch;
+if($email_address!=''):
+
+$savethis =  new Users();
+$savethis -> fname = $fname;
+$savethis -> lname = $lname;
+$savethis -> email = $email_address;
+$savethis -> username = $username;
+$savethis -> password = $default;
+$savethis -> activation = md5($activation) ;
+$savethis -> usertype_id = $user_type;
+$savethis -> telephone = $telephone;
+$savethis -> district = $district_code;
+$savethis -> facility = $facility_id;
+$savethis -> status = 1;
+$savethis -> county_id = $county;
+$savethis -> save(); 
+
+//$phones=$telephone;
+$message="Dear $fname $lname, your default password is : $default. \nVisit health-cmp.or.ke to change it and access the system.";
+
+$message=urlencode($message);
+//echo '<pre>'; print_r($phone_numbers);echo '<pre>';exit;
+file("http://41.57.109.242:13000/cgi-bin/sendsms?username=clinton&password=ch41sms&to=$telephone&text=$message");
+
+//Send registered user email with password and validation link
+
+$full_name = $fname.' '.$lname;
+$link = 'health-cmp.or.ke';
+$site_url=base_url();
+$sms_code=$activation;
+
+$subject = "Account Creation";
+$message = '
+<table class="body">
+<tr>
+<td class="center" align="center" valign="top">
+<center>
+
+<table class="row header">
+<tr>
+<td class="center" align="center">
+<center>
+
+<table class="container">
+<tr>
+<td class="wrapper last">
+
+<table class="twelve columns">
+<tr>
+<td class="six sub-columns last" style="text-align:right; vertical-align:middle;">
 																																<span class="template-label"></span>
 																															</td>
 																															<td class="expander"></td>

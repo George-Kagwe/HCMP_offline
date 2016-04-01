@@ -197,21 +197,25 @@
 								<div class="input-group form-group u_mgt">
 									<span class="input-group-addon sponsor">First Name</span>
 									<input type="text" required="required" name="first_name" id="first_name" class="form-control " placeholder="Enter First Name" >
+									<span class="help-block"></span>
 								</div>
 
 								<div class="input-group form-group u_mgt">
 									<span class="input-group-addon sponsor">Last Name</span>
 									<input type="text" name="last_name" required="required" id="last_name" class="form-control " placeholder="Last Name" >
+									<span class="help-block"></span>
 								</div>
 
 								<div class="input-group form-group u_mgt">
 									<span class="input-group-addon sponsor">Phone Number</span>
 									<input type="telephone" name="telephone" required="required" id="telephone" class="form-control " placeholder="Enter Phone Number eg, 254" tabindex="5">
+									<span class="help-block"></span>
 								</div>
 
 								<div class="input-group form-group u_mgt">
 									<span class="input-group-addon sponsor">Email</span>
 									<input type="email" name="email" id="email" required="required" class="form-control " placeholder="email@domain.com" tabindex="6">
+									<span class="help-block"></span>
 								</div>
 
 								<div class="input-group form-group u_mgt">
@@ -231,6 +235,7 @@
 												endforeach;
 												?>
 									</select>
+									<span class="help-block"></span>
 								</div>
 									<?php
 
@@ -251,6 +256,7 @@
 												endforeach;
 												?>
 											</select>
+											<span class="help-block"></span>
 									</div>
 
 
@@ -268,6 +274,7 @@
 											endforeach;
 											?>
 										</select>
+										<span class="help-block"></span>
 									</div>
 
 									<div class="input-group form-group u_mgt">
@@ -276,6 +283,7 @@
 												<option value="">Select Facility</option>
 												
 										</select>
+										<span class="help-block"></span>
 
 									</div>
 
@@ -341,26 +349,31 @@
 							<div class="input-group form-group u_mgt">
 									<span class="input-group-addon sponsor">First Name</span>
 									<input type="text" required="required" name="fname_edit" id="fname_edit" class="form-control " placeholder="First Name" >
+									<span class="help-block"></span>
 							</div>
 
 							<div class="input-group form-group u_mgt">
 									<span class="input-group-addon sponsor">Last Name</span>
 										<input type="text" name="lname_edit" required="required" id="lname_edit" class="form-control " placeholder="Last Name" >
+										<span class="help-block"></span>
 							</div>
 
 							<div class="input-group form-group u_mgt">
 									<span class="input-group-addon sponsor">Phone No</span>
 										<input type="telephone" disabled="disabled" name="telephone_edit" required="required" id="telephone_edit" class="form-control " placeholder="telephone eg, 254" tabindex="5">
+										<span class="help-block"></span>
 							</div>
 
 							<div class="input-group form-group u_mgt">
 									<span class="input-group-addon sponsor">Email</span>
 										<input type="email" data-id="" name="email_edit" id="email_edit" required="required" class="form-control " placeholder="email@domain.com" tabindex="6">
+										<span class="help-block"></span>
 							</div>
 
 							<div class="input-group form-group u_mgt">
 									<span class="input-group-addon sponsor">User Name</span>
 										<input type="email" name="username_edit" id="username_edit" required="required" class="form-control " placeholder="email@domain.com" tabindex="5" readonly>
+										<span class="help-block"></span>
 							</div>
 
 							<div class="col-md-6">
