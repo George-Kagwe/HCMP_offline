@@ -7,7 +7,7 @@ class Sync_model extends Doctrine_Record {
 	}
 
 	public function get_new_data($table_name){
-		$query = $this->db->query("SELECT * FROM '$table_name' WHERE last_updated < now();");
+		$query = $this->db->query("SELECT * FROM $table_name ");//WHERE last_updated < now();");
 		$result = $query->result_array();
 		return $result;
 	}

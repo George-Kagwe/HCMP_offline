@@ -121,17 +121,19 @@ class Synchronization extends MY_Controller {
 			 'tuberculosis_data' ,                  
 			'user'   );
               */
-			
+
            //access all the tables in the array
            $all_tables = $this->db->list_tables();
           
-          foreach ($all_tables as $key => $value) {
+          foreach ($all_tables as $key => $table_name) {
           	
-          	 echo "$value" ."<br/>";
+          	 //echo "$table_name" ."<br/>";
            
 
-           //$data_from_table = Sync_Model::get_all($value);
+           $data_from_table[$table_name] = Sync_model::get_new_data($table_name);
+      
 
+            var_dump($data_from_table);
  
 
           }
