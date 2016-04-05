@@ -127,16 +127,16 @@ class Synchronization extends MY_Controller {
           
           foreach ($all_tables as $key => $table_name) {
           	
-          	 //echo "$table_name" ."<br/>";
-           
+          	 
+                            
+			           $data_from_table[$table_name] = Sync_model::get_new_data($table_name);
+			      
 
-           $data_from_table[$table_name] = Sync_model::get_new_data($table_name);
-      
-
-            var_dump($data_from_table);
+			            // var_dump($data_from_table);
  
-
+                
           }
+			           echo "<pre>";print_r($data_from_table);
 
 
 
