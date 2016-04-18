@@ -11,7 +11,7 @@ class Admin extends MY_Controller {
 		parent::__construct();
 
 		$this -> load -> helper(array('form', 'url'));
-		$this -> load -> library(array('hcmp_functions', 'form_validation'));
+		$this -> load -> library(array('hcmp_functions', 'form_validation','upload'));
 	}
 
 
@@ -19,7 +19,85 @@ class Admin extends MY_Controller {
 		$data['title'] = "Commodities";
 		$this -> load -> view("", $data);
 	}
+
+
+	public function upload_emaillists(){
+           
+                $file_name= "List.xls";
+		$inputFileName = 'uploads/excel/'.$file_name;
+		
+		$inputFileType = PHPExcel_IOFactory::identify($inputFileName);
+		$excel2 = PHPExcel_IOFactory::createReader($inputFileType);
+		// $objReader = new PHPExcel_Reader_Excel2007();
+		$excel2->setReadDataOnly(true);
+		$objPHPExcel = $excel2->load($inputFileName);
+
+		// echo "<pre>";print_r($inputFileName);exit;
+
+		$sheet = $objPHPExcel->getSheet(0); 
+		$highestRow = $sheet->getHighestRow()+1; 
+		$highestColumn = $sheet->getHighestColumn();
+
+		// echo "<pre>";print_r($highestRow);echo "</pre>";exit;
+		$rowData = array();
+		for ($row = 2; $row < $highestRow; $row++){ 
+		    //  Read a row of data into an array
+		    $rowData_ = $sheet->rangeToArray('A' . $row . ':F' . $row);
+		 echo "<pre>";print_r($rowData_);echo "</pre>";die();
+		   array_push($rowData, $rowData_[0]);
+		    //  Insert row data array into your database of choice here
+		}
+       //  echo "<pre>";        
+     // var_dump($rowData);die();
+	$details = null;
+		       foreach ($rowData as $key => $value) {
+
+
+		        $recipient = $value[0] ." ".$value[1]; 
+		       	$email = $value[2];
+		       	$facility = $value[3];
+		       	$county = $value[4];
+		       	$subcounty = $value[5] ;
+
+
+
+		       	$sql = "insert into email_listings(`recipient_name`,`recipient_email`,`facility_code`,`county`,'subcounty')
+		       	 values ('$recipient','$email','$facility','$county','$subcounty')";
+
+		       	 //echo "$sql"; die();
+
+		     $this->db->query($sql);
+		     	       }
+
+			
+      
+            $this->view_list();
+
+	}
 	
+
+	public function view_list($file_name = NULL,$category = NULL){
+
+		    //$query = "SELECT * from  email_listings inner join  facilities ON facility_code = facility_code";
+
+		
+		     $query = $this->db->get('email_listings');
+               
+
+                $data['listing']=$query->result();
+
+            $data['content_view'] = "Admin/upload_excel_view";
+           // $template =
+            $this -> load -> view("shared_files/template/dashboard_template_v", $data);
+
+
+                //var_dump($data);
+
+            
+
+		
+
+	}//end of recepient upload
 	public function manage_commodities() {
 		$data['title'] = "Commodities";
 		$data['content_view'] = "Admin/commodities_v";
